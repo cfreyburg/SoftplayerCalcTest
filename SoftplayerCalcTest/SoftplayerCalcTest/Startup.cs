@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SoftplayerCalcTest.Domain;
 using SoftplayerCalcTest.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace SoftplayerCalcTest
 {
@@ -30,6 +31,11 @@ namespace SoftplayerCalcTest
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<ICalculaJurosService, CalculaJurosService>();
             services.AddScoped<ICalculaJurosHelper, CalculaJurosHelper>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Calc Test", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +49,12 @@ namespace SoftplayerCalcTest
             {
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Calc Test");
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
