@@ -2,6 +2,7 @@
 using Moq;
 using SoftplayerCalcTest.Controllers;
 using SoftplayerCalcTest.Domain;
+using SoftplayerCalcTest.Services;
 
 namespace SoftplayerCalcTest.Tests.Controllers
 {
@@ -28,6 +29,23 @@ namespace SoftplayerCalcTest.Tests.Controllers
             var actual = _controller.Get(valorInicial, meses);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void integration_test()
+        {
+            decimal valorInicial = 100;
+            int meses = 5;
+            decimal expected = 105.10M;
+
+            var helper = new CalculaJurosHelper();
+            var service = new CalculaJurosService(helper);
+            var controller = new CalculaJurosController(service);
+
+            var actual = controller.Get(valorInicial, meses);
+
+            Assert.AreEqual(expected, actual);
+
         }
     }
 }
